@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-        <!-- css 연결 -->
-        <link href="/main.css" rel="stylesheet">
-</head>
-<body class="grey-bg">
-    <!-- 서버 데이터를 ejs 파일 안에 넣으려면 ejs 파일로 데이터 전송, ejs 파일 안에서 <%=서버가 보낸 데이터이름%> -->
-
-    <div class="white-bg">
-        <div class="list-box">
-            <h4>글제목</h4>
-            <p>글내용</p>
-        </div>
-        <div class="list-box">
-            <h4>글제목</h4>
-            <p>글내용</p>
-        </div>
-    </div>
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<!-- css 연결 -->
+		<link href="/main.css" rel="stylesheet" />
+	</head>
+	<body class="grey-bg">
+		<%= JSON.stringify(글목록) %>
+		<div class="white-bg">
+			<div class="list-box">
+				<h4><%=글목록[0].title%></h4>
+				<!-- 서버사이드 렌더링 : html을 서버측에서 데이터를 채워 완성한 후 유저에게 보내주는 것 -->
+				<!-- 클라이언트 렌더링 : 텅 비어있는 html과 데이터만 유저에게 보내고, html 내용은 자바스크립트로 유저 브라우저에서 생성 -->
+				<p>글내용</p>
+			</div>
+			<div class="list-box">
+				<h4>글제목</h4>
+				<p>글내용</p>
+			</div>
+		</div>
+	</body>
 </html>
