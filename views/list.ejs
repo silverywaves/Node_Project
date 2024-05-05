@@ -9,6 +9,11 @@
 	</head>
 	<body class="grey-bg">
 		<%= JSON.stringify(글목록) %>
+		<!-- array나 object 데이터를 그대로 사용시 JSON.stringify() 안에 적어야 안깨지고 잘보임 -->
+
+		<!-- include() 쓰면 다른  ejs 파일에 있던 html 복사 가능 -->
+		<%- include('nav.ejs') %>
+
 		<div class="white-bg">
 			<div class="list-box">
 				<h4><%=글목록[0].title%></h4>
@@ -17,9 +22,16 @@
 				<p>글내용</p>
 			</div>
 			<div class="list-box">
-				<h4>글제목</h4>
+				<h4><%=글목록[1].title%></h4>
 				<p>글내용</p>
 			</div>
+			<!-- ejs파일 안에서 자바스크립트 문법 사용 가능 -->
+			<% for(let i=0; i<글목록.length; i++){ %>
+			<div class="list-box">
+				<h4><%=글목록[i].title%></h4>
+				<p>글내용임</p>
+			</div>
+			<% } %>
 		</div>
 	</body>
 </html>
