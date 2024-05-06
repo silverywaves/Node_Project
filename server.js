@@ -12,6 +12,10 @@ app.set('view engine', 'ejs');
 // html 파일안에 ejs 문법 사용해 서버데이터를 집어넣을 수 있다고 생각하면 됨
 // 서버 데이터를 ejs 파일 안에 넣으려면 ejs 파일로 데이터 전송, ejs 파일 안에서 <%=서버가 보낸 데이터이름%>
 
+// 유저가 데이터를 보내면 그걸 꺼내쓰는 코드가 어려움 -> 요청.body로 쉽게 꺼내쓸 수 있게 도와주는 코드
+app.use(express.json());
+app.use(express.urlencoded({ extends: true }));
+
 // mongodb 라이브러리 셋팅(호스팅받은 mongodb에 접속하고 접속결과를 db라는 변수에 저장)
 const { MongoClient } = require('mongodb');
 
@@ -80,6 +84,36 @@ app.get('/list', async (요청, 응답) => {
  *      - 그것을 방지하려면 콜백함수를 쓰거나, await 를 쓰거나, .then 을 써야함
  */
 
-app.get('/time', async(요청, 응답) => {
-    응답.render('time.ejs', { date : new Date() })
-})
+app.get('/time', async (요청, 응답) => {
+	응답.render('time.ejs', { date: new Date() });
+});
+
+// 글 작성 기능
+// 1. 글작성페이지에서 글써서 서버로 전송
+// 2. 서버는 글을 검사
+// 3. 이상없으면 DB에 저장
+app.get('/write', (요청, 응답) => {
+	응답.render('write.ejs');
+});
+
+app.post('/add', async (요청, 응답) => {
+	console.log(요청.body);
+	// 제목이 비어있으면 DB저장X <- 유저 글 검사하려면 if/else
+	// if(제목이 빈칸이면){DB 저장하지 말고 경고문 띄우자}
+	try {
+		if (요청.body.title == '') {
+			응답.send('제목을 입력하세요');
+		} else {
+			await db
+				.collection('post')
+				.insertOne({
+					title: 요청.body.title,
+					content: 요청.body.content,
+				});
+			응답.redirect('/list');
+		}
+	} catch (e) {
+		console.log(e); // 에러메시지 출력
+		응답.status(500).send('서버에러');
+	}
+});
